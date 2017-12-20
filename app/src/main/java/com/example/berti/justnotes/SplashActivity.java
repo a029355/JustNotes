@@ -6,35 +6,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 public class SplashActivity extends Activity {
 
-    // Timer da splash screen
-    private static int SPLASH_TIME_OUT = 3000;
-    protected AdaptadorBaseDados adaptadorBaseDados;
-    protected Cursor cursor;
-    protected String tema=null;
-
+    protected static int SPLASH_TIME_OUT = 3000;
 
     @Override
     protected void onStart() {
         super.onStart();
-        //showToast("MainActivity onStart()");
-        //Toast.makeText(this, "MainActivity onStart()", Toast.LENGTH_SHORT).show();
-        adaptadorBaseDados = new AdaptadorBaseDados(this).open();
     }
     protected void onPause() {
         super.onPause();
-        //showToast("MainActivity onPause()");
-        //Toast.makeText(this, "MainActivity onPause()", Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onStop() {
         super.onStop();
-        //showToast("MainActivity onStop()");
-        //Toast.makeText(this, "MainActivity onStop()", Toast.LENGTH_SHORT).show();
-        adaptadorBaseDados.close();
 
     }
 
@@ -43,34 +31,14 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        adaptadorBaseDados = new AdaptadorBaseDados(this).open();
-        cursor = adaptadorBaseDados.obterDefinicoes();
-
-        if (cursor.moveToFirst() && cursor!=null) {
-            tema = cursor.getString(1);
-        }
-
-        if(tema!=null){
-            super.setTheme(R.style.AppTheme);
-        }
-        else{
-            super.setTheme(R.style.Green);
-        }
-
-
         new Handler().postDelayed(new Runnable() {
             /*
              * Exibindo splash com um timer.
              */
             @Override
             public void run() {
-                // Esse método será executado sempre que o timer acabar
-                // E inicia a activity principal
-                Intent i = new Intent(SplashActivity.this, MainActivity.class);
-                i.putExtra("tema", tema);
-                startActivity(i);
 
-                // Fecha esta activity
+                executarActivity(MainActivity.class, null, null);
                 finish();
             }
         }, SPLASH_TIME_OUT);
@@ -84,5 +52,24 @@ public class SplashActivity extends Activity {
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        switch(keyCode)
+        {
+            case KeyEvent.KEYCODE_BACK:
+                moveTaskToBack(true);
+                return true;
+        }
+        return false;
+    }
+
+    protected void executarActivity(Class<?> subAtividade, Integer indexCategoria, Integer indexNota){
+        Intent x = new Intent(this, subAtividade);
+        x.putExtra("indexCategoria", indexCategoria);
+        x.putExtra("indexNota", indexNota);
+        startActivity(x);
     }
 }

@@ -1,16 +1,14 @@
 package com.example.berti.justnotes;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,18 +20,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Category extends AppCompatActivity {
+public class VerNota extends AppCompatActivity {
 
     protected Intent oIntent;
     protected AdaptadorBaseDados adaptadorBaseDados;
     protected Cursor cursor;
-    protected List<String> titulos;
-    protected ListView listView;
-    protected Integer indexCategoria;
-    protected FloatingActionButton btnAdd;
+    protected Integer indexCategoria, indexNota;
     protected Button btnEditar, btnEliminar;
+    protected TextView txvTitulo, txvData, txvTexto;
     protected final Context context = this;
-    protected TextView txvCategoria;
 
     @Override
     protected void onStart() {
@@ -53,73 +48,32 @@ public class Category extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+        setContentView(R.layout.activity_ver_nota);
 
         oIntent = getIntent();
         indexCategoria = oIntent.getExtras().getInt("indexCategoria");
-        txvCategoria = (TextView)findViewById(R.id.txvCategoria);
+        indexNota = oIntent.getExtras().getInt("indexNota");
+
+        txvTitulo = (TextView)findViewById(R.id.txvTitulo);
+        txvData = (TextView)findViewById(R.id.txvData);
+        txvTexto = (TextView)findViewById(R.id.txvTexto);
+        txvTexto.setMovementMethod(new ScrollingMovementMethod());
         cursor = null;
-        titulos = new ArrayList<>();
         adaptadorBaseDados = new AdaptadorBaseDados(this).open();
 
 
-        cursor = adaptadorBaseDados.obterCategoria(indexCategoria);
+        cursor = adaptadorBaseDados.obterNota(indexNota);
         if (cursor.moveToFirst()) {
-            txvCategoria.setText(cursor.getString(1));
+            txvTitulo.setText(cursor.getString(1));
+            txvData.setText(cursor.getString(3));
+            txvTexto.setText(cursor.getString(2));
         }
-
-        cursor=null;
-
-
-        cursor = adaptadorBaseDados.obterTitulosCategoria(indexCategoria);
-
-        if (cursor.moveToFirst()) {
-            do {
-                titulos.add(cursor.getString(1));
-
-            } while (cursor.moveToNext());
-        }
-
-
-
-        listView = (ListView)findViewById(R.id.listView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, titulos);
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                cursor.moveToPosition(position);
-                int index = cursor.getInt(0);
-
-
-
-                executarActivity(VerNota.class, indexCategoria, index);
-
-
-            }
-
-        });
-
-
-        btnAdd = (FloatingActionButton)findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                executarActivity(AddNote.class, indexCategoria, null);
-            }
-        });
 
         btnEditar = (Button)findViewById(R.id.btnEditar);
         btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                executarActivity(EditCategory.class, indexCategoria, null);
+                executarActivity(EditNote.class, indexCategoria, indexNota);
             }
         });
 
@@ -129,16 +83,15 @@ public class Category extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
-                alertDialogBuilder.setTitle("Deseja mesmo eliminar esta categoria?");
+                alertDialogBuilder.setTitle("Deseja mesmo eliminar esta nota?");
 
                 alertDialogBuilder
-                        .setMessage("Se eliminar todas as notas serão perdidas!")
                         .setCancelable(false)
                         .setPositiveButton("Sim",new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                adaptadorBaseDados.apagarCategoria(indexCategoria);
+                                adaptadorBaseDados.apagarNota(indexNota);
                                 showToast("Eliminado com sucesso!");
-                                executarActivity(MainActivity.class, null, null);
+                                executarActivity(Category.class, indexCategoria, null);
                             }
                         })
                         .setNegativeButton("Não",new DialogInterface.OnClickListener() {
@@ -151,6 +104,8 @@ public class Category extends AppCompatActivity {
                 alertDialog.show();
             }
         });
+
+
     }
 
     protected void showToast(String mensagem){
@@ -162,8 +117,9 @@ public class Category extends AppCompatActivity {
         toast.show();
     }
 
+    @Override
     public void onBackPressed() {
-        executarActivity(MainActivity.class, null, null);
+        executarActivity(Category.class, indexCategoria, null);
         finish();
         super.onBackPressed();
     }

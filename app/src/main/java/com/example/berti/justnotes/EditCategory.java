@@ -3,24 +3,21 @@ package com.example.berti.justnotes;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.Toast;
 
-import java.util.List;
-
-public class AddCategory extends AppCompatActivity {
+public class EditCategory extends AppCompatActivity {
 
     protected Intent oIntent;
     protected AdaptadorBaseDados adaptadorBaseDados;
     protected Cursor cursor;
-    protected Button btnInserir;
+    protected Button btnGuardar;
     protected EditText edtNome;
+    protected Integer indexCategoria;
 
     @Override
     protected void onStart() {
@@ -40,43 +37,38 @@ public class AddCategory extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_category);
+        setContentView(R.layout.activity_edit_category);
 
+        oIntent = getIntent();
+        indexCategoria = oIntent.getExtras().getInt("indexCategoria");
         edtNome = (EditText)findViewById(R.id.edtNome);
-        btnInserir = (Button)findViewById(R.id.btnInserir);
-        btnInserir.setOnClickListener(new View.OnClickListener() {
+
+        adaptadorBaseDados = new AdaptadorBaseDados(this).open();
+
+        cursor = adaptadorBaseDados.obterCategoria(indexCategoria);
+        if(cursor.moveToFirst()){
+            edtNome.setText(cursor.getString(1));
+        }
+
+
+
+        btnGuardar = (Button)findViewById(R.id.btnGuardar);
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
                 if(validaCampos(edtNome)) {
 
-                    Boolean resultado = adaptadorBaseDados.insereCategoria(edtNome.getText().toString());
+                    Boolean resultado = adaptadorBaseDados.updateCategoria(indexCategoria, edtNome.getText().toString());
 
-                    String[] arrMensagem = {"Erro ao inserir o registro!", "Registro inserido com sucesso!"};
+                    String[] arrMensagem = {"Erro ao guardar!", "Guardado com sucesso!"};
 
                     if (resultado) {
                         showToast(arrMensagem[1]);
-                        Toast.makeText(getApplicationContext(), arrMensagem[1], Toast.LENGTH_SHORT).show();
                         edtNome.setText("");
 
-
-                        executarActivity(MainActivity.class, null, null);
-                        //startActivity(intent);
-                        /*
-                        Thread thread = new Thread(){
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(3500); // As I am using LENGTH_LONG in Toast
-                                    startActivity(intent);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-
-                        thread.start();*/
+                        executarActivity(Category.class, indexCategoria, null);
 
                     } else {
                         showToast(arrMensagem[0]);
@@ -107,6 +99,13 @@ public class AddCategory extends AppCompatActivity {
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        executarActivity(Category.class, indexCategoria, null);
+        finish();
+        super.onBackPressed();
     }
 
     protected void executarActivity(Class<?> subAtividade, Integer indexCategoria, Integer indexNota){

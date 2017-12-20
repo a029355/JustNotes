@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,15 +19,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Intent oIntent;
-    protected String tema=null;
+    protected Intent oIntent;
     protected AdaptadorBaseDados adaptadorBaseDados;
     protected Cursor cursor;
     protected GridView gridView;
-    private List<Integer> arrIdCategorias;
-    private List<String> arrNomesCategorias;
-    private FloatingActionButton btnAdd;
-    private GridviewAdapter mAdapter;
+    protected List<Integer> arrIdCategorias;
+    protected List<String> arrNomesCategorias;
+    protected FloatingActionButton btnAdd;
+    protected GridviewAdapter mAdapter;
 
     @Override
     protected void onStart() {
@@ -47,11 +47,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        oIntent = getIntent();
-        tema = oIntent.getExtras().getString("tema");
-        SetTheme.setThemeToActivity(this, "Green");
-
         setContentView(R.layout.activity_main);
 
 
@@ -89,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Toast.makeText(MainActivity.this, mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
 
-                executarActivity(Category.class, "Green", index);
+                executarActivity(Category.class, index, null);
 
             }
         });
@@ -100,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                executarActivity(AddCategory.class, tema);
+                executarActivity(AddCategory.class, null, null);
             }
         });
     }
@@ -115,16 +110,22 @@ public class MainActivity extends AppCompatActivity {
         toast.show();
     }
 
-    private void executarActivity(Class<?> subAtividade, String tema){
-        Intent x = new Intent(this, subAtividade);
-        x.putExtra("tema", tema);
-        startActivity(x);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        switch(keyCode)
+        {
+            case KeyEvent.KEYCODE_BACK:
+                moveTaskToBack(true);
+                return true;
+        }
+        return false;
     }
 
-    private void executarActivity(Class<?> subAtividade, String tema, Integer index){
+    protected void executarActivity(Class<?> subAtividade, Integer indexCategoria, Integer indexNota){
         Intent x = new Intent(this, subAtividade);
-        x.putExtra("tema", tema);
-        x.putExtra("indexCategoria", index);
+        x.putExtra("indexCategoria", indexCategoria);
+        x.putExtra("indexNota", indexNota);
         startActivity(x);
     }
 }
