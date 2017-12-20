@@ -1,5 +1,6 @@
 package com.example.berti.justnotes;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -78,4 +79,32 @@ public class AdaptadorBaseDados {
 
         return cursor;
     }
+
+    public boolean insereCategoria(String nome){
+        ContentValues valores;
+        long resultado;
+
+        database = dbHelper.getWritableDatabase();
+        valores = new ContentValues();
+        valores.put("nomeCategoria", nome);
+
+        resultado = database.insert("categorias", null, valores);
+        database.close();
+
+        if (resultado ==-1)
+            return false;
+        else
+            return true;
+
+    }
+
+    public Cursor obterTitulosCategoria(Integer index){
+        Cursor cursor = database.rawQuery(
+                "select idNota, textoNota, dataNota from notas where idCategoria=?", new String[] { index.toString() });
+
+
+        return cursor;
+
+    }
+
 }

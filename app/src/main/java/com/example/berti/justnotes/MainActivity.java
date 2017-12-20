@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -21,8 +23,10 @@ public class MainActivity extends AppCompatActivity {
     protected AdaptadorBaseDados adaptadorBaseDados;
     protected Cursor cursor;
     protected GridView gridView;
-    private List<String> arrCategorias;
+    private List<Integer> arrIdCategorias;
+    private List<String> arrNomesCategorias;
     private FloatingActionButton btnAdd;
+    private GridviewAdapter mAdapter;
 
     @Override
     protected void onStart() {
@@ -47,7 +51,12 @@ public class MainActivity extends AppCompatActivity {
         oIntent = getIntent();
         tema = oIntent.getExtras().getString("tema");
         SetTheme.setThemeToActivity(this, "Green");
+
         setContentView(R.layout.activity_main);
+
+
+        arrIdCategorias = new ArrayList<Integer>();
+        arrNomesCategorias = new ArrayList<String>();
 
         gridView = (GridView)findViewById(R.id.gvCatetogias);
 
@@ -56,26 +65,42 @@ public class MainActivity extends AppCompatActivity {
 
         if (cursor.moveToFirst() && cursor!=null) {
             do {
-                arrCategorias.add(cursor.getString(1));
+                arrIdCategorias.add(cursor.getInt(0));
+                arrNomesCategorias.add(cursor.getString(1));
             } while (cursor.moveToNext());
         }
 
-        arrCategorias = new ArrayList<String>();
-        //String[] arr = new String[] { "one", "two", "three" };
+        if(arrNomesCategorias.size() !=0) {
 
-        if(arrCategorias.size() !=0) {
+            mAdapter = new GridviewAdapter(this, arrNomesCategorias);
+            //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrCategorias);
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrCategorias);
-
-            gridView.setAdapter(adapter);
+            gridView.setAdapter(mAdapter);
         }
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+                                    long arg3) {
+
+                cursor.moveToPosition(position);
+                int index = cursor.getInt(0);
+
+                //Toast.makeText(MainActivity.this, mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
+
+                executarActivity(Category.class, "Green", index);
+
+            }
+        });
+
 
 
         btnAdd = (FloatingActionButton)findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("Click!");
+                executarActivity(AddCategory.class, tema);
             }
         });
     }
@@ -88,5 +113,18 @@ public class MainActivity extends AppCompatActivity {
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+    }
+
+    private void executarActivity(Class<?> subAtividade, String tema){
+        Intent x = new Intent(this, subAtividade);
+        x.putExtra("tema", tema);
+        startActivity(x);
+    }
+
+    private void executarActivity(Class<?> subAtividade, String tema, Integer index){
+        Intent x = new Intent(this, subAtividade);
+        x.putExtra("tema", tema);
+        x.putExtra("indexCategoria", index);
+        startActivity(x);
     }
 }
