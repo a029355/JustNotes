@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.berti.justnotes.EditCategory">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/edtNome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -33,6 +33,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Guardar"
+        android:background="@android:color/holo_blue_dark"
+        android:textColor="@android:color/background_light"
+        android:textColorLink="@android:color/holo_blue_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.092"

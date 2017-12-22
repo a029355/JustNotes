@@ -9,31 +9,33 @@
         android:id="@+id/imgLogo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_above="@+id/textView"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="81dp"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_assignment_black_24dp" />
+        android:src="@drawable/ic_assignment_white_48dp" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:textSize="12dp"
-        android:textColor="#454545"
         android:gravity="center_horizontal"
         android:layout_alignParentBottom="true"
         android:text="Bertino Ferreira"
-        android:id="@+id/textView2" />
+        android:id="@+id/textView2"
+        android:textColor="@android:color/background_light"
+        />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="121dp"
+        android:layout_centerVertical="true"
         android:text="JustNotes"
-        android:textColor="@android:color/background_dark"
-        android:textSize="30sp" />
+        android:textColor="@android:color/background_light"
+        android:textSize="30sp"
+        android:textStyle="bold|italic"/>
 
 </RelativeLayout>

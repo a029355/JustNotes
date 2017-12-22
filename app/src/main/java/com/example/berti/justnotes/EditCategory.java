@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,8 +17,10 @@ public class EditCategory extends AppCompatActivity {
     protected AdaptadorBaseDados adaptadorBaseDados;
     protected Cursor cursor;
     protected Button btnGuardar;
-    protected EditText edtNome;
+    protected AutoCompleteTextView edtNome;
     protected Integer indexCategoria;
+    protected final String _LINK1 = "miang.pt";
+    protected final String _LINK2 = "teste/xml/categorias.xml";
 
     @Override
     protected void onStart() {
@@ -41,7 +44,7 @@ public class EditCategory extends AppCompatActivity {
 
         oIntent = getIntent();
         indexCategoria = oIntent.getExtras().getInt("indexCategoria");
-        edtNome = (EditText)findViewById(R.id.edtNome);
+        edtNome = (AutoCompleteTextView)findViewById(R.id.edtNome);
 
         adaptadorBaseDados = new AdaptadorBaseDados(this).open();
 
@@ -52,7 +55,9 @@ public class EditCategory extends AppCompatActivity {
 
 
 
+
         btnGuardar = (Button)findViewById(R.id.btnGuardar);
+        executarViewAsyncGenerator(btnGuardar, edtNome);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +83,10 @@ public class EditCategory extends AppCompatActivity {
 
             }
         });
+    }
+
+    protected void executarViewAsyncGenerator(Button btnInserir, AutoCompleteTextView edtNome){
+        new ViewAsyncGenerator(btnInserir, _LINK1, _LINK2, 80, edtNome, getApplicationContext()).execute(0);
     }
 
     protected Boolean validaCampos(EditText edtNome){

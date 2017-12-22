@@ -19,7 +19,7 @@
         android:textSize="18sp"
         android:gravity="center"
         android:textAlignment="center"
-        ></TextView>
+       android:textColor="@color/colorBlack" ></TextView>
 
 
 </RelativeLayout>

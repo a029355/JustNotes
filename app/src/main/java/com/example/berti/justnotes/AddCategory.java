@@ -7,9 +7,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -20,7 +22,12 @@ public class AddCategory extends AppCompatActivity {
     protected AdaptadorBaseDados adaptadorBaseDados;
     protected Cursor cursor;
     protected Button btnInserir;
-    protected EditText edtNome;
+    protected AutoCompleteTextView edtNome;
+    //protected final String _LINK1 = "www.dropbox.com";
+    //protected final String _LINK2 = "s/8avdrcntu5vdd51/categorias.xml?dl=0";
+    protected final String host = "miang.pt";
+    protected final String path = "teste/xml/categorias.xml";
+
 
     @Override
     protected void onStart() {
@@ -42,8 +49,11 @@ public class AddCategory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
 
-        edtNome = (EditText)findViewById(R.id.edtNome);
+        edtNome = (AutoCompleteTextView )findViewById(R.id.edtNome);
         btnInserir = (Button)findViewById(R.id.btnInserir);
+
+        executarViewAsyncGenerator(btnInserir, edtNome);
+
         btnInserir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,21 +72,7 @@ public class AddCategory extends AppCompatActivity {
 
 
                         executarActivity(MainActivity.class, null, null);
-                        //startActivity(intent);
-                        /*
-                        Thread thread = new Thread(){
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(3500); // As I am using LENGTH_LONG in Toast
-                                    startActivity(intent);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
 
-                        thread.start();*/
 
                     } else {
                         showToast(arrMensagem[0]);
@@ -87,6 +83,10 @@ public class AddCategory extends AppCompatActivity {
             }
         });
     }
+    protected void executarViewAsyncGenerator(Button btnInserir, AutoCompleteTextView  edtNome){
+        new ViewAsyncGenerator(btnInserir, host, path, 80, edtNome, getApplicationContext()).execute(0);
+    }
+
 
     protected Boolean validaCampos(EditText edtNome){
         Boolean b = false;

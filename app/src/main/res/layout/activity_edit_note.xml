@@ -42,7 +42,7 @@
     <EditText
         android:id="@+id/edtTexto"
         android:layout_width="0dp"
-        android:layout_height="351dp"
+        android:layout_height="336dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -69,6 +69,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Guardar"
+        android:background="@android:color/holo_blue_dark"
+        android:textColor="@android:color/background_light"
+        android:textColorLink="@android:color/holo_blue_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.028"

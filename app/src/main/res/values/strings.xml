@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">JustNotes</string>
     <string name="app_name_categorias">JustNotes - Categorias</string>
+    <string name="app_name_categoria">JustNotes - Categoria</string>
+    <string name="app_name_nova_categoria">JustNotes - Nova Categoria</string>
+    <string name="app_name_editar_categoria">JustNotes - Editar Categoria</string>
+    <string name="app_name_nova_nota">JustNotes - Nova Nota</string>
+    <string name="app_name_editar_nota">JustNotes - Editar Nota</string>
+    <string name="app_name_ver_nota">JustNotes - Nota</string>
 </resources>

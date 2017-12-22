@@ -26,14 +26,19 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name_categorias" />
-        <activity android:name=".AddCategory" />
-        <activity android:name=".AddNote" />
-        <activity android:name=".VerNota" />
+        <activity android:name=".AddCategory"
+            android:label="@string/app_name_nova_categoria"/>
+        <activity android:name=".AddNote"
+            android:label="@string/app_name_nova_nota"/>
+        <activity android:name=".VerNota"
+            android:label="@string/app_name_ver_nota"/>
         <activity
             android:name=".Category"
-            android:label="@string/app_name_categorias" />
-        <activity android:name=".EditCategory" />
-        <activity android:name=".EditNote"></activity>
+            android:label="@string/app_name_categoria" />
+        <activity android:name=".EditCategory"
+            android:label="@string/app_name_editar_categoria"/>
+        <activity android:name=".EditNote"
+            android:label="@string/app_name_editar_nota"></activity>
     </application>
 
 </manifest>
