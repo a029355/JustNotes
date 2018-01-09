@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -23,11 +24,8 @@ public class AddCategory extends AppCompatActivity {
     protected Cursor cursor;
     protected Button btnInserir;
     protected AutoCompleteTextView edtNome;
-    //protected final String _LINK1 = "www.dropbox.com";
-    //protected final String _LINK2 = "s/8avdrcntu5vdd51/categorias.xml?dl=0";
-    protected final String host = "miang.pt";
-    protected final String path = "teste/xml/categorias.xml";
-
+    protected final String host = "antoniofreitas.pt";
+    protected final String path = "justnotes/index.xml";
 
     @Override
     protected void onStart() {
@@ -83,6 +81,25 @@ public class AddCategory extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outputState) {
+        String s = edtNome.getText().toString();
+        if (!s.equals("")) {
+            outputState.putString("edtNome", s);
+        }
+        super.onSaveInstanceState(outputState);
+    }
+
+    protected void restoreVarsFromBundle(Bundle savedInstanceState) {
+        String s = savedInstanceState.getString("edtNome");
+        if (!s.equals(""))
+            edtNome.setText(s);
+    }
+
+
+
+
     protected void executarViewAsyncGenerator(Button btnInserir, AutoCompleteTextView  edtNome){
         new ViewAsyncGenerator(btnInserir, host, path, 80, edtNome, getApplicationContext()).execute(0);
     }

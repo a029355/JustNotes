@@ -100,7 +100,7 @@ public class EditNote extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if (validaCampos(edtNome)) {
+                if (validaCampos(edtTexto)) {
 
                     if(edtNome.getText().toString().equals(""))
                         titulo = getCurrentDate();
@@ -109,7 +109,7 @@ public class EditNote extends AppCompatActivity {
 
                     cursorCategorias.moveToPosition(spinner.getSelectedItemPosition());
 
-                    Integer idCat = cursorCategorias.getInt(0);
+                    Integer idCat = cursorCategorias.getInt(spinner.getSelectedItemPosition());
 
                     Boolean resultado = adaptadorBaseDados.updateNota(titulo, edtTexto.getText().toString(), getCurrentDate().toString(), indexNota, idCat);
 
@@ -133,6 +133,58 @@ public class EditNote extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outputState) {
+        String s = edtNome.getText().toString();
+        if (!s.equals("")) {
+            outputState.putString("edtNome", s);
+        }
+
+        String s2 = edtTexto.getText().toString();
+        if (!s2.equals("")) {
+            outputState.putString("edtTexto", s2);
+        }
+
+        Integer positionSpinner = spinner.getSelectedItemPosition();
+        if (positionSpinner!=null) {
+            outputState.putInt("spinner", positionSpinner);
+        }
+
+        if (indexNota!=null) {
+            outputState.putInt("indexNota", indexNota);
+        }
+
+        if (indexCategoria!=null) {
+            outputState.putInt("indexCategoria", indexCategoria);
+        }
+
+        super.onSaveInstanceState(outputState);
+    }
+
+    protected void restoreVarsFromBundle(Bundle savedInstanceState) {
+        String s = savedInstanceState.getString("edtNome");
+        if (!s.equals(""))
+            edtNome.setText(s);
+
+        String s2 = savedInstanceState.getString("edtTexto");
+        if (!s.equals(""))
+            edtTexto.setText(s);
+
+        Integer positionSpinner = savedInstanceState.getInt("spinner");
+        if (positionSpinner!=null)
+            spinner.setSelection(positionSpinner);
+
+
+        Integer idNota = savedInstanceState.getInt("indexNota");
+        if (indexNota!=null)
+            indexNota = idNota;
+
+        Integer idCategoria = savedInstanceState.getInt("indexCategoria");
+        if (indexCategoria!=null)
+            indexCategoria = idCategoria;
+    }
+
 
     protected Boolean validaCampos(EditText edtTexto) {
         Boolean b = false;

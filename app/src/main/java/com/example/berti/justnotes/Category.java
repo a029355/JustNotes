@@ -31,7 +31,7 @@ public class Category extends AppCompatActivity {
     protected ListView listView;
     protected Integer indexCategoria;
     protected FloatingActionButton btnAdd;
-    protected Button btnEditar, btnEliminar;
+    protected FloatingActionButton btnEditar, btnEliminar;
     protected final Context context = this;
     protected TextView txvCategoria;
 
@@ -115,7 +115,7 @@ public class Category extends AppCompatActivity {
             }
         });
 
-        btnEditar = (Button)findViewById(R.id.btnEditar);
+        btnEditar = (FloatingActionButton)findViewById(R.id.btnEditar);
         btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,7 +123,7 @@ public class Category extends AppCompatActivity {
             }
         });
 
-        btnEliminar = (Button)findViewById(R.id.btnEliminar);
+        btnEliminar = (FloatingActionButton)findViewById(R.id.btnEliminar);
         btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,6 +151,20 @@ public class Category extends AppCompatActivity {
                 alertDialog.show();
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outputState) {
+        if (indexCategoria!=null) {
+            outputState.putInt("indexCategoria", indexCategoria);
+        }
+        super.onSaveInstanceState(outputState);
+    }
+
+    protected void restoreVarsFromBundle(Bundle savedInstanceState) {
+        Integer i = savedInstanceState.getInt("indexCategoria");
+        if (i!=null)
+            indexCategoria = i;
     }
 
     protected void showToast(String mensagem){

@@ -64,9 +64,9 @@ public class VerNota extends AppCompatActivity {
 
         cursor = adaptadorBaseDados.obterNota(indexNota);
         if (cursor.moveToFirst()) {
-            txvTitulo.setText(cursor.getString(1));
-            txvData.setText(cursor.getString(3));
-            txvTexto.setText(cursor.getString(2));
+            txvTitulo.setText("Titulo: "+cursor.getString(1));
+            txvData.setText("Data: "+cursor.getString(3));
+            txvTexto.setText("Nota: "+cursor.getString(2));
         }
 
         btnEditar = (Button)findViewById(R.id.btnEditar);
@@ -107,6 +107,30 @@ public class VerNota extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outputState) {
+        if (indexNota!=null) {
+            outputState.putInt("indexNota", indexNota);
+        }
+
+        if (indexCategoria!=null) {
+            outputState.putInt("indexCategoria", indexCategoria);
+        }
+        super.onSaveInstanceState(outputState);
+    }
+
+    protected void restoreVarsFromBundle(Bundle savedInstanceState) {
+        Integer idNota = savedInstanceState.getInt("indexNota");
+        if (indexNota!=null)
+            indexNota = idNota;
+
+        Integer idCategoria = savedInstanceState.getInt("indexCategoria");
+        if (indexCategoria!=null)
+            indexCategoria = idCategoria;
+    }
+
+
 
     protected void showToast(String mensagem){
         Context context = getApplicationContext();

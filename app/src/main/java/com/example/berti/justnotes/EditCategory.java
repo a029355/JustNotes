@@ -85,6 +85,22 @@ public class EditCategory extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outputState) {
+        String s = edtNome.getText().toString();
+        if (!s.equals("")) {
+            outputState.putString("edtNome", s);
+        }
+        super.onSaveInstanceState(outputState);
+    }
+
+    protected void restoreVarsFromBundle(Bundle savedInstanceState) {
+        String s = savedInstanceState.getString("edtNome");
+        if (!s.equals(""))
+            edtNome.setText(s);
+    }
+
+
     protected void executarViewAsyncGenerator(Button btnInserir, AutoCompleteTextView edtNome){
         new ViewAsyncGenerator(btnInserir, _LINK1, _LINK2, 80, edtNome, getApplicationContext()).execute(0);
     }

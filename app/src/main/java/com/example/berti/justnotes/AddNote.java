@@ -69,12 +69,47 @@ public class AddNote extends AppCompatActivity {
                         showToast(arrMensagem[1]);
                         edtTitulo.setText("");
                         edtNota.setText("");
+                        executarActivity(Category.class, indexCategoria, null);
                     } else {
                         showToast(arrMensagem[0]);
                     }
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outputState) {
+        String s = edtTitulo.getText().toString();
+        if (!s.equals("")) {
+            outputState.putString("edtTitulo", s);
+        }
+
+        String s2 = edtNota.getText().toString();
+        if (!s2.equals("")) {
+            outputState.putString("edtTexto", s2);
+        }
+
+        if (indexCategoria!=null) {
+            outputState.putInt("indexCategoria", indexCategoria);
+        }
+
+        super.onSaveInstanceState(outputState);
+    }
+
+    protected void restoreVarsFromBundle(Bundle savedInstanceState) {
+        String s = savedInstanceState.getString("edtTitulo");
+        if (!s.equals(""))
+            edtTitulo.setText(s);
+
+        String s2 = savedInstanceState.getString("edtNota");
+        if (!s.equals(""))
+            edtNota.setText(s);
+
+        Integer idCategoria = savedInstanceState.getInt("indexCategoria");
+        if (indexCategoria!=null)
+            indexCategoria = idCategoria;
     }
 
     protected void showToast(String mensagem){

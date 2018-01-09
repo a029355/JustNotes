@@ -2,6 +2,7 @@ package com.example.berti.justnotes;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -70,30 +71,30 @@ public class ViewAsyncGenerator extends AsyncTask<Integer, Double, String> {
             SaxXmlParser<NomesCategorias, SaxXmlClienteHandler> oMeuParser =
                     new SaxXmlParser<NomesCategorias, SaxXmlClienteHandler>();
             oMeuParser.setHandler(new SaxXmlClienteHandler());
-
             listaCategorias = oMeuParser.parse(new StringReader(s));
+
+            String osIds = "";
+            NomesCategorias umCliente = null;
+
+            if(listaCategorias.size()!=0) {
+                String[] cat = new String[listaCategorias.size()];
+                for (int k = 0; k < listaCategorias.size(); ++k) {
+
+                    umCliente = listaCategorias.get(k);
+                    aLista.add(umCliente.getCategoriaNome() + "\n");
+                    osIds = osIds + umCliente.getCategoriaNome() + "\n";
+                    cat[k] = umCliente.getCategoriaNome();
+
+                }
+
+                s = osIds;
+                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, cat);
+                t.setThreshold(1);
+                t.setAdapter(itemsAdapter);
+            }
         } catch (Exception e) {
             aLista.add(e.toString());  // devolve a excepção obtida
         }
-
-        String osIds = "";
-        NomesCategorias umCliente = null;
-
-        String[] cat = new String[listaCategorias.size()];
-        for (int k = 0; k < listaCategorias.size(); ++k) {
-
-            umCliente = listaCategorias.get(k);
-            aLista.add(umCliente.getCategoriaNome() + "\n");
-            osIds = osIds + umCliente.getCategoriaNome()+"\n";
-            cat[k] =umCliente.getCategoriaNome();
-
-        }
-
-        s = osIds;
-        //t.setText(s);
-        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_dropdown_item_1line, cat);
-        t.setThreshold(1);
-        t.setAdapter(itemsAdapter);
     }
 }
 
