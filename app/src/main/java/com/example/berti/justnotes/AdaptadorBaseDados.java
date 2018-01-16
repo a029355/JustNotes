@@ -27,16 +27,9 @@ public class AdaptadorBaseDados {
         dbHelper.close();
     }
 
-    public Cursor obterDefinicoes(){
-        String[] colunas = new String[2];
-        colunas[0] = "idDefinicao";
-        colunas[1] = "nomeTema";
-        return database.query("definicoes", colunas, null, null, null, null, null, null);
-    }
-
     public Cursor obterCategorias(){
         Cursor cursor = database.rawQuery(
-                "select idCategoria, nomeCategoria from categorias", null);
+                "select idCategoria, nomeCategoria, (select count(*) from notas where notas.idCategoria = categorias.idCategoria) from categorias", null);
 
 
         return cursor;

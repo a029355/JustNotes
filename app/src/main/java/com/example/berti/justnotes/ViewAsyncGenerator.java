@@ -68,22 +68,22 @@ public class ViewAsyncGenerator extends AsyncTask<Integer, Double, String> {
         ArrayList<String> aLista = new ArrayList<String>(10);
         try {
 
-            SaxXmlParser<NomesCategorias, SaxXmlClienteHandler> oMeuParser =
-                    new SaxXmlParser<NomesCategorias, SaxXmlClienteHandler>();
-            oMeuParser.setHandler(new SaxXmlClienteHandler());
+            SaxXmlParser<NomesCategorias, SaxXmlCategoriaHandler> oMeuParser =
+                    new SaxXmlParser<NomesCategorias, SaxXmlCategoriaHandler>();
+            oMeuParser.setHandler(new SaxXmlCategoriaHandler());
             listaCategorias = oMeuParser.parse(new StringReader(s));
 
             String osIds = "";
-            NomesCategorias umCliente = null;
+            NomesCategorias umaCategoria = null;
 
             if(listaCategorias.size()!=0) {
                 String[] cat = new String[listaCategorias.size()];
                 for (int k = 0; k < listaCategorias.size(); ++k) {
 
-                    umCliente = listaCategorias.get(k);
-                    aLista.add(umCliente.getCategoriaNome() + "\n");
-                    osIds = osIds + umCliente.getCategoriaNome() + "\n";
-                    cat[k] = umCliente.getCategoriaNome();
+                    umaCategoria = listaCategorias.get(k);
+                    aLista.add(umaCategoria.getCategoriaNome() + "\n");
+                    osIds = osIds + umaCategoria.getCategoriaNome() + "\n";
+                    cat[k] = umaCategoria.getCategoriaNome();
 
                 }
 

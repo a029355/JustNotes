@@ -6,13 +6,13 @@ import org.xml.sax.SAXException;
 import java.util.ArrayList;
 
 /**
- * Created by berti on 21/12/2017.
+ * Created by berti on 16/01/2018.
  */
 
-public class SaxXmlClienteHandler extends MyXmlListHandler<NomesCategorias> {
+public class SaxXmlCategoriaHandler extends MyXmlListHandler<NomesCategorias> {
     private String tempValue;
     private NomesCategorias tempCategorias;
-    public SaxXmlClienteHandler() {
+    public SaxXmlCategoriaHandler() {
         osElementos = new ArrayList<NomesCategorias>();
     }
     @Override

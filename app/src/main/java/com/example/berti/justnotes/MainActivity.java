@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         if (cursor.moveToFirst() && cursor!=null) {
             do {
                 arrIdCategorias.add(cursor.getInt(0));
-                arrNomesCategorias.add(cursor.getString(1));
+                arrNomesCategorias.add(cursor.getString(1) +" ("+cursor.getInt(2)+")");
             } while (cursor.moveToNext());
         }
 
